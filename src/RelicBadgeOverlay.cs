@@ -184,9 +184,9 @@ public static class RelicBadgeOverlay
             if (child == null) continue;
 
             // NRelicBasicHolder — relic reward screen (typed access)
-            if (child is NRelicBasicHolder basicHolder && basicHolder.Relic?.Model != null)
+            if (child is NRelicBasicHolder basicHolder && SafeModel(basicHolder.Relic) is { } basicModel)
             {
-                results.Add((basicHolder, basicHolder.Relic.Model));
+                results.Add((basicHolder, basicModel));
                 continue;
             }
 
@@ -208,15 +208,27 @@ public static class RelicBadgeOverlay
                 continue;
             }
 
-            // NTreasureRoomRelicHolder — treasure chest (typed access)
-            if (child is NTreasureRoomRelicHolder treasureHolder && treasureHolder.Relic?.Model != null)
+            // NTreasureRoomRelicHolder — treasure chest (typed access).
+            // In singleplayer the multiplayer holders are never initialized, so their NRelic has no model.
+            if (child is NTreasureRoomRelicHolder treasureHolder)
             {
-                results.Add((treasureHolder, treasureHolder.Relic.Model));
+                if (SafeModel(treasureHolder.Relic) is { } treasureModel)
+                    results.Add((treasureHolder, treasureModel));
                 continue;
             }
 
             FindRelicsInTree(child, results, depth + 1);
         }
+    }
+
+    /// <summary>
+    /// NRelic.Model throws instead of returning null when the relic hasn't been set yet.
+    /// </summary>
+    private static RelicModel? SafeModel(NRelic? relic)
+    {
+        if (relic == null) return null;
+        try { return relic.Model; }
+        catch (InvalidOperationException) { return null; }
     }
 
     /// <summary>

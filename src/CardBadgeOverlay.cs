@@ -54,7 +54,7 @@ public static class CardBadgeOverlay
 
                 var lookupName = NormalizeCardId(cardName);
                 var tiers = TierData.GetTiers(character, lookupName);
-                if (tiers.BlendedScore < 0) continue;
+                if (tiers.Score < 0) continue;
 
                 var badge = CreateBadge(tiers, node);
                 if (badge != null)
@@ -215,7 +215,7 @@ public static class CardBadgeOverlay
     {
         try
         {
-            var color = TierColors.GetValueOrDefault(tiers.BlendedTier, TierColors["?"]);
+            var color = TierColors.GetValueOrDefault(tiers.Tier, TierColors["?"]);
             // Always white text — readable on all tier colors
             var textColor = new Color(1f, 1f, 1f);
 
@@ -261,7 +261,7 @@ public static class CardBadgeOverlay
             innerMain.AddThemeStyleboxOverride("panel", innerMainStyle);
 
             var tierLabel = new Label();
-            tierLabel.Text = tiers.BlendedTier;
+            tierLabel.Text = tiers.Tier;
             tierLabel.HorizontalAlignment = HorizontalAlignment.Center;
             tierLabel.VerticalAlignment = VerticalAlignment.Center;
             tierLabel.AddThemeColorOverride("font_color", textColor);
@@ -309,7 +309,7 @@ public static class CardBadgeOverlay
             innerSmall.AddThemeStyleboxOverride("panel", innerSmallStyle);
 
             var scoreLabel = new Label();
-            scoreLabel.Text = $"{tiers.BlendedScore}";
+            scoreLabel.Text = $"{tiers.Score}";
             scoreLabel.HorizontalAlignment = HorizontalAlignment.Center;
             scoreLabel.VerticalAlignment = VerticalAlignment.Center;
             scoreLabel.AddThemeColorOverride("font_color", new Color(0.9f, 0.85f, 0.75f));

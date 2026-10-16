@@ -27,7 +27,6 @@
 
 	<ItemGroup>
 		<EmbeddedResource Include="data\tier_lists\mobalytics_cards.json" LogicalName="mobalytics_cards.json" />
-		<EmbeddedResource Include="data\tier_lists\slaythespire2_com_cards.json" LogicalName="slaythespire2_com_cards.json" />
 		<EmbeddedResource Include="data\tier_lists\mobalytics_relics.json" LogicalName="mobalytics_relics.json" />
 	</ItemGroup>
 

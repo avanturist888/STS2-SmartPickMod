@@ -453,7 +453,7 @@ public partial class TierEditorScreen : Control
                 if (placed.Contains(card.Id.Entry.ToLowerInvariant())) continue;
 
                 var tiers = TierData.GetTiers(_currentCharacter, CardBadgeOverlay.NormalizeCardIdPublic(card.Id.Entry));
-                var targetTier = tiers.BlendedTier;
+                var targetTier = tiers.Tier;
                 var icon = CreateCardIcon(card);
                 if (icon == null) continue;
 
@@ -1044,7 +1044,7 @@ public partial class TierEditorScreen : Control
                 {
                     var cardName = CardBadgeOverlay.NormalizeCardIdPublic(card.Id.Entry);
                     var result = TierData.GetTiers(poolTitle, cardName);
-                    var tier = result.BlendedScore >= 0 ? result.BlendedTier : "?";
+                    var tier = result.Score >= 0 ? result.Tier : "?";
 
                     if (!charTiers.ContainsKey(tier))
                         charTiers[tier] = new();
@@ -1186,7 +1186,7 @@ public partial class TierEditorScreen : Control
                 foreach (var cardKey in list)
                 {
                     var currentResult = TierData.GetTiers(character, cardKey);
-                    var oldTier = currentResult.BlendedScore >= 0 ? currentResult.BlendedTier : "?";
+                    var oldTier = currentResult.Score >= 0 ? currentResult.Tier : "?";
                     if (oldTier != newTier)
                     {
                         string displayName = cardKey;

@@ -12,7 +12,7 @@ A lightweight mod that shows **tier ratings** directly on cards and relics in Sl
 
 ### Tier Badges
 
-- **Tier badges on every card** — colored circle (S/A/B/C/D) with a blended score, shown on:
+- **Tier badges on every card** — colored circle (S/A/B/C/D) with a score, shown on:
   - Card reward screen (post-combat & events)
   - Deck view
   - Merchant shop
@@ -44,7 +44,7 @@ A lightweight mod that shows **tier ratings** directly on cards and relics in Sl
 
 ### Other
 
-- **Two card tier sources blended** — combines [Mobalytics](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards) and [slaythespire-2.com](https://slaythespire-2.com/card-tier) tier lists into a single rating
+- **Card tiers** from [Mobalytics](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards) (per character, plus multiplayer cards)
 - **Relic tiers** from [Mobalytics](https://mobalytics.gg/slay-the-spire-2/tier-lists/relics) (global, not per-character)
 - **All 5 characters supported** — Ironclad, Silent, Defect, Regent, Necrobinder
 - **Multiplayer compatible**
@@ -95,12 +95,11 @@ If your game is not in the default Steam location, create `local.props`:
 
 The mod uses [HarmonyLib](https://github.com/pardeike/Harmony) to hook into game screens and attaches Godot UI elements (tier badges) to card nodes. Card identity is read directly from the game's `CardModel` — no heuristics or name parsing needed.
 
-Tier data from two community sources is embedded in the DLL as JSON resources and blended into a single S/A/B/C/D rating per card per character.
+Tier data from Mobalytics is embedded in the DLL as JSON resources, giving a single S/A/B/C/D rating per card per character.
 
 ## Data sources
 
 - **[Mobalytics](https://mobalytics.gg/slay-the-spire-2/tier-lists/cards)** — card tier list
-- **[slaythespire-2.com](https://slaythespire-2.com/card-tier)** — community wiki card tiers
 - **[Mobalytics](https://mobalytics.gg/slay-the-spire-2/tier-lists/relics)** — relic tier list
 
 Tier list JSONs are in `data/tier_lists/`. Or use the in-game editor (F7) to customize ratings.

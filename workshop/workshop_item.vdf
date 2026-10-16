@@ -6,6 +6,6 @@
   "previewfile"     "C:\Users\vasis\BoberInSpire-dev\workshop\preview.png"
   "visibility"      "0"
   "title"           "SmartPick - Card Tier Badges"
-  "description"     "Shows card tier ratings (S/A/B/C/D) directly on cards in reward, deck, and merchant screens. Blends Mobalytics and slaythespire-2.com tier lists into a single rating per card per character.\n\nFeatures:\n- Tier badges on every card (S/A/B/C/D)\n- WoW-style color coding\n- All 5 characters supported\n- Two tier sources blended into one rating"
+  "description"     "Shows card tier ratings (S/A/B/C/D) directly on cards in reward, deck, and merchant screens. Ratings come from the Mobalytics tier lists, per card per character.\n\nFeatures:\n- Tier badges on every card (S/A/B/C/D)\n- WoW-style color coding\n- All 5 characters supported"
   "changenote"      "Initial release v2.0.0"
 }

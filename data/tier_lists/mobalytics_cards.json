@@ -1,6 +1,6 @@
 {
   "source": "https://mobalytics.gg/slay-the-spire-2/tier-lists/cards",
-  "snapshot_date": "2026-05-09",
+  "snapshot_date": "2026-09-18",
   "note": "Mobalytics STS2 card tier list (run scripts/scrape_tiers.py to refresh).",
   "characters": {
     "Ironclad": {
@@ -11,11 +11,11 @@
       "D": ["One-Two Punch", "Mangle", "Barricade", "Juggernaut", "Conflagration"]
     },
     "Silent": {
-      "S": ["Well-Laid Plans", "Blade of Ink", "Afterimage", "Footwork", "Adrenaline", "Abrasive", "Acrobatics", "Escape Plan", "Tracking", "Prepared", "Calculated Gamble", "Reflex", "Untouchable", "Piercing Wail", "Tools of the Trade", "Malaise", "Leg Sweep", "Dodge and Roll", "The Hunt"],
-      "A": ["Noxious Fumes", "Tactician", "Blur", "Flechettes", "Expose", "Backflip", "Pinpoint", "Blade Dance", "Assassinate", "Leading Strike", "Hidden Daggers", "Infinite Blades", "Accuracy", "Echoing Slash"],
-      "B": ["Phantom Blades", "Predator", "Backstab", "Cloak and Dagger", "Sucker Punch", "Dagger Throw", "Dagger Spray", "Ricochet", "Precise Cut", "Deflect", "Slice", "Pounce"],
-      "C": ["Dash", "Flick-Flack", "Shadowmeld", "Knife Trap", "Corrosive Wave", "Murder", "Master Planner", "Fan of Knives", "Burst", "Poisoned Stab", "Outbreak", "Serpent Form", "Accelerant", "Finisher", "Strangle", "Deadly Poison", "Expertise", "Anticipate", "Bubble Bubble", "Hand Trick", "Snakebite", "Haze", "Skewer", "Shadow Step"],
-      "D": ["Up My Sleeve", "Speedster", "Memento Mori", "Grand Finale", "Follow Through", "Bullet Time", "Nightmare", "Storm of Steel", "Mirage", "Bouncing Flask", "Envenom"]
+      "S": ["Adrenaline", "Well-Laid Plans", "Afterimage", "Tools of the Trade", "The Hunt", "Footwork", "Blade of Ink", "Calculated Gamble", "Malaise", "Accuracy", "Noxious Fumes", "Piercing Wail", "Abrasive", "Expose", "Leg Sweep", "Tracking", "Hidden Daggers", "Prepared", "Sidestep", "Leading Strike", "Blur", "Phantom Blades", "Backflip"],
+      "A": ["Echoing Slash", "Assassinate", "Haze", "Infinite Blades", "Acrobatics", "Pinpoint", "Backstab", "Blade Dance", "Escape Plan", "Predator", "Flechettes", "Cloak and Dagger", "Dodge and Roll", "Knife Trap"],
+      "B": ["Outbreak", "Reflex", "Fan of Knives", "Ricochet", "Precise Cut", "Pounce", "Bubble Bubble", "Dagger Spray", "Snakebite"],
+      "C": ["Sucker Punch", "Tactician", "Mirage", "Serpent Form", "Anticipate", "Dash", "Deflect", "Slice", "Skewer", "Dagger Throw", "Bullet Time", "Bouncing Flask", "Accelerant", "Poisoned Stab", "Shadowmeld", "Shadow Step", "Untouchable", "Nightmare", "Flick-Flack", "Corrosive Wave", "Burst", "Grand Finale", "Storm of Steel", "Murder", "Expertise", "Strangle"],
+      "D": ["Envenom", "Hand Trick", "Memento Mori", "Up My Sleeve", "Finisher", "Deadly Poison", "Speedster", "Master Planner"]
     },
     "Regent": {
       "S": ["Big Bang", "Reflect", "Child of the Stars", "Pillar of Creation", "Convergence", "GUARDS!!!", "Bulwark", "Meteor Shower", "Astral Pulse", "Know Thy Place", "Royal Gamble", "Spectrum Shift", "Glow", "Comet", "The Sealed Throne", "Void Form", "CHARGE!!", "Crash Landing"],
@@ -25,18 +25,25 @@
       "D": ["Resonance", "Heirloom Hammer", "Monarch's Gaze", "Monologue", "Crescent Spear"]
     },
     "Necrobinder": {
-      "S": ["Demesne", "Defy", "Delay", "Friendship", "Neurosurge", "Reaper Form", "Lethality", "Sleight of Flesh", "Capture Spirit", "Banshee's Cry", "Dirge", "Enfeebling Touch", "Call of the Void", "Putrefy", "Pagestorm", "Shared Fate", "Danse Macabre", "Spirit of Ash", "Reanimate"],
-      "A": ["Eradicate", "Borrowed Time", "Deathbringer", "Bone Shards", "Grave Warden", "Death's Door", "Undeath", "Fetch", "Debilitate", "Reap", "Shroud", "End of Days", "No Escape", "Hang", "Invoke", "The Scythe"],
-      "B": ["Dredge", "Parse", "Devour Life", "Oblivion", "Countdown", "Negative Pulse", "Scourge", "Sacrifice", "Pull Aggro", "Flatten", "Melancholy", "Seance", "Poke", "Drain Power", "Defile", "Sow"],
-      "C": ["Wisp", "Sentry Mode", "Spur", "Transfigure", "Cleanse", "Reave", "Haunt", "Necro Mastery", "Soul Storm", "Time's Up", "Blight Strike", "Sculpting Strike", "Fear", "Snap", "Afterlife", "Rattle", "Death March", "Right Hand Hand", "Veilpiercer", "Calcify", "Squeeze", "Pull from Below", "Misery", "Severance"],
-      "D": ["Graveblast", "Sic 'Em", "High Five", "Eidolon", "Bury"]
+      "S": ["Demesne", "Friendship", "Neurosurge", "Call of the Void", "Sleight of Flesh", "Putrefy", "Danse Macabre", "Lethality", "Delay", "Reanimate", "Enfeebling Touch", "Defy", "Reaper Form", "Bone Shards", "Pagestorm", "Banshee's Cry", "Shared Fate", "Capture Spirit", "Deathbringer", "Dirge", "Spirit of Ash"],
+      "A": ["Eradicate", "Fetch", "Hang", "Undeath", "Grave Warden", "End of Days", "Borrowed Time", "Afterlife"],
+      "B": ["Transfigure", "Spur", "No Escape", "Countdown", "Sow", "Calcify", "Invoke", "Pull Aggro", "Melancholy", "Oblivion", "Sentry Mode", "The Scythe", "Death's Door", "Reap", "Shroud", "Haunt", "Dredge", "Debilitate", "Negative Pulse", "Defile", "High Five", "Pull from Below", "Eidolon", "Time's Up"],
+      "C": ["Cleanse", "Seance", "Sic 'Em", "Wisp", "Snap", "Rattle", "Right Hand Hand", "Blight Strike", "Death March", "Squeeze", "Drain Power", "Poke", "Scourge", "Sculpting Strike", "Necro Mastery", "Devour Life", "Sacrifice", "Reave", "Parse", "Veilpiercer", "Misery", "Severance", "Flatten"],
+      "D": ["Bury", "Soul Storm", "Graveblast", "Fear"]
     },
     "Defect": {
-      "S": ["Echo Form", "Defragment", "Glacier", "Modded", "Genetic Algorithm", "Darkness", "Synchronize", "Chill", "Coolheaded"],
-      "A": ["Machine Learning", "Null", "Barrage", "Ice Lance", "Buffer", "Boot Sequence", "Supercritical", "Cold Snap", "Hotfix", "Bulk Up", "Capacitor", "Coolant", "Spinner", "Shadow Shield", "FTL", "Charge Battery", "Go for the Eyes", "Sunder"],
-      "B": ["Overclock", "Skim", "TURBO", "Glasswork", "Rainbow", "Subroutine", "All for One", "Compile Driver", "Fight Through", "Tesla Coil", "Hologram", "Feral", "Focused Strike", "Double Energy", "Signal Boost", "Iteration", "Trash to Treasure", "Creative AI", "Rocket Punch", "Refract", "Leap", "Loop", "Reboot", "Ball Lightning", "Hailstorm", "Meteor Strike", "Adaptive Strike"],
-      "C": ["Lightning Rod", "Multi-Cast", "Boost Away", "Shatter", "Voltaic", "Compact", "Fusion", "Sweeping Beam", "Momentum Strike", "Beam Cell", "Tempest", "Gunk Up", "Scrape", "Scavenge", "Synthesis", "White Noise", "Flak Cannon", "Smokestack", "Helix Drill", "Consuming Shadow"],
-      "D": ["Thunder", "Hyperbeam", "Chaos", "Claw", "Uproar", "Storm"]
+      "S": ["Echo Form", "Defragment", "Shatter", "Glacier", "Null", "Machine Learning", "Genetic Algorithm", "Trash to Treasure", "Darkness", "Modded", "Chill", "Supercritical", "Synchronize", "Barrage", "Capacitor", "Buffer", "Boot Sequence", "Overclock", "Ice Lance", "Loop", "Compact"],
+      "A": ["Flak Cannon", "Coolant", "TURBO", "Subroutine", "Rocket Punch", "Iteration", "Hailstorm", "Shadow Shield", "Sunder", "Spinner", "Refract", "FTL", "Signal Boost", "Cold Snap", "Charge Battery", "Coolheaded", "Ball Lightning", "Bulk Up", "Skim", "Go for the Eyes", "Fight Through", "Uproar", "Boost Away", "Gunk Up"],
+      "B": ["Hologram", "All for One", "Double Energy", "Tesla Coil", "Fusion", "Creative AI", "Feral", "Rainbow", "Helix Drill", "Consuming Shadow", "Synthesis", "Leap"],
+      "C": ["Multi-Cast", "Lightning Rod", "Smokestack", "Reboot", "Meteor Strike", "Compile Driver", "Momentum Strike", "Hotfix", "Beam Cell", "Scavenge", "Glasswork", "Adaptive Strike", "Tempest", "Storm", "White Noise", "Voltaic"],
+      "D": ["Sweeping Beam", "Thunder", "Focused Strike", "Scrape", "Claw", "Chaos", "Hyperbeam"]
+    },
+    "Colorless": {
+      "S": ["Knockdown", "Flanking", "Beacon of Hope", "Rally", "Glimpse Beyond", "Energy Surge", "Huddle Up"],
+      "A": ["Hammer Time", "Gang Up", "Sneaky", "Tag Team", "Believe in You", "Mimic", "Largesse"],
+      "B": ["Demonic Shield", "Lift"],
+      "C": ["Legion of Bone", "Ignition", "Coordinate", "Intercept"],
+      "D": ["Tank"]
     }
   }
 }

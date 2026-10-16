@@ -7,14 +7,13 @@ namespace FirstMod;
 
 /// <summary>
 /// Loads embedded tier-list JSON files and provides per-card tier lookups.
-/// Two sources: Mobalytics and slaythespire-2.com wiki.
+/// Source: Mobalytics.
 /// Supports custom tier overrides with position-based scoring.
 /// </summary>
 public static class TierData
 {
     // character (lowercase) → card name (lowercase) → tier letter
     private static Dictionary<string, Dictionary<string, string>> _mobaIndex = new();
-    private static Dictionary<string, Dictionary<string, string>> _wikiIndex = new();
 
     // Custom tiers: character → tier → ordered list of card names
     private static Dictionary<string, Dictionary<string, List<string>>> _customOrdered = new();
@@ -52,17 +51,10 @@ public static class TierData
         }
         catch (Exception ex) { Log.Error($"[SmartPick] TierData mobalytics load: {ex.Message}"); }
 
-        try
-        {
-            _wikiIndex = LoadEmbeddedTierList("slaythespire2_com_cards.json");
-            Log.Info($"[SmartPick] TierData: loaded Wiki ({_wikiIndex.Count} characters)");
-        }
-        catch (Exception ex) { Log.Error($"[SmartPick] TierData wiki load: {ex.Message}"); }
-
         LoadCustomTiers();
     }
 
-    public record TierResult(string? MobaTier, string? WikiTier, string BlendedTier, int BlendedScore);
+    public record TierResult(string Tier, int Score);
 
     public static TierResult GetTiers(string character, string cardName)
     {
@@ -74,36 +66,22 @@ public static class TierData
         if (customResult != null)
             return customResult;
 
-        var mobaTier = LookupTier(_mobaIndex, charKey, cardKey);
-        var wikiTier = LookupTier(_wikiIndex, charKey, cardKey);
+        // Multiplayer cards are rated in a separate "colorless" list, but some of them
+        // live in character pools (e.g. Tank is an Ironclad card).
+        var mobaTier = LookupTier(_mobaIndex, charKey, cardKey) ?? LookupTier(_mobaIndex, "colorless", cardKey);
 
         // Fallback: if character unknown, search all characters
-        if (mobaTier == null && wikiTier == null && (string.IsNullOrEmpty(charKey) || charKey == "unknown"))
+        if (mobaTier == null && (string.IsNullOrEmpty(charKey) || charKey == "unknown"))
         {
             foreach (var ch in _mobaIndex.Keys)
             {
                 mobaTier = LookupTier(_mobaIndex, ch, cardKey);
                 if (mobaTier != null) break;
             }
-            foreach (var ch in _wikiIndex.Keys)
-            {
-                wikiTier = LookupTier(_wikiIndex, ch, cardKey);
-                if (wikiTier != null) break;
-            }
         }
 
-        int score;
-        if (mobaTier != null && wikiTier != null)
-            score = (TierScore.GetValueOrDefault(mobaTier, 50) + TierScore.GetValueOrDefault(wikiTier, 50)) / 2;
-        else if (mobaTier != null)
-            score = TierScore.GetValueOrDefault(mobaTier, 50);
-        else if (wikiTier != null)
-            score = TierScore.GetValueOrDefault(wikiTier, 50);
-        else
-            score = -1;
-
-        var blended = ScoreToTier(score);
-        return new TierResult(mobaTier, wikiTier, blended, score);
+        var score = mobaTier != null ? TierScore.GetValueOrDefault(mobaTier, 50) : -1;
+        return new TierResult(ScoreToTier(score), score);
     }
 
     /// <summary>Look up custom tier with position-based scoring.</summary>
@@ -126,7 +104,7 @@ public static class TierData
             if (idx >= 0)
             {
                 var score = CalculatePositionScore(tier, idx, list.Count);
-                return new TierResult(null, null, tier, score);
+                return new TierResult(tier, score);
             }
         }
         return null;

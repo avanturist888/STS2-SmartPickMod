@@ -1,20 +1,25 @@
 #!/usr/bin/env python3
-"""Re-scrape tier lists from Mobalytics and slaythespire-2.com.
+"""Re-scrape tier lists from Mobalytics.
 
 Usage:
-    python3 scripts/scrape_tiers.py
+    python3 scripts/scrape_tiers.py [--moba-relics FILE] [--moba-cards FILE]
 
 Writes updated JSON files to data/tier_lists/. Requires `curl` on PATH.
+
+Mobalytics sits behind a Cloudflare challenge that blocks curl. If the fetch
+fails, open the tier list page in a normal browser, save its HTML (or just the
+`window.__PRELOADED_STATE__=...` script text) to a file and pass it via
+--moba-relics / --moba-cards.
 """
 
 from __future__ import annotations
 
+import argparse
 import datetime as dt
 import html as html_lib
 import json
 import re
 import subprocess
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -38,52 +43,7 @@ def fetch(url: str) -> str:
     return out.stdout.decode("utf-8", errors="replace")
 
 
-# --- slaythespire-2.com -----------------------------------------------------
-
-CHARS = ["Ironclad", "Silent", "Defect", "Regent", "Necrobinder"]
 TIER_LETTERS = "SABCDF"
-
-
-def scrape_sts2com() -> dict:
-    html = fetch("https://slaythespire-2.com/card-tier")
-
-    # Locate each character's section by its h2 header.
-    char_starts = {}
-    for c in CHARS:
-        m = re.search(re.escape(c) + r" Card Tier List", html)
-        if m:
-            char_starts[c] = m.start()
-    ordered = sorted(char_starts.items(), key=lambda x: x[1])
-
-    characters: dict[str, dict[str, list[str]]] = {}
-    marker_re = re.compile(
-        r'<span>([SABCDF])</span><span class="text-\[8px\] font-medium opacity-80">(\d+)</span></div>'
-    )
-    for i, (c, start) in enumerate(ordered):
-        end = ordered[i + 1][1] if i + 1 < len(ordered) else len(html)
-        section = html[start:end]
-        markers = [
-            (m.group(1), int(m.group(2)), m.start(), m.end())
-            for m in marker_re.finditer(section)
-        ]
-        tiers: dict[str, list[str]] = {}
-        for j, (tier, count, _ms, mend) in enumerate(markers):
-            content_end = markers[j + 1][2] if j + 1 < len(markers) else len(section)
-            content = section[mend:content_end]
-            cards = [html_lib.unescape(x) for x in re.findall(r'alt="([^"]+)"', content)]
-            cards = [c for c in cards if c.strip()]
-            seen: set[str] = set()
-            cards = [c for c in cards if not (c in seen or seen.add(c))]
-            if len(cards) != count:
-                print(f"WARN sts2com {c}/{tier}: expected {count}, got {len(cards)}", file=sys.stderr)
-            tiers[tier] = cards
-        characters[c] = tiers
-    return {
-        "source": "https://slaythespire-2.com/card-tier",
-        "snapshot_date": TODAY,
-        "note": "Scraped from slaythespire-2.com (run scripts/scrape_tiers.py to refresh).",
-        "characters": characters,
-    }
 
 
 # --- Mobalytics --------------------------------------------------------------
@@ -94,8 +54,24 @@ PRELOAD_RE = re.compile(r"window\.__PRELOADED_STATE__\s*=\s*(\{.*?\});", re.DOTA
 def _extract_preload(html: str) -> dict:
     m = PRELOAD_RE.search(html)
     if not m:
-        raise RuntimeError("__PRELOADED_STATE__ not found in Mobalytics HTML")
+        hint = " (Cloudflare challenge page)" if "Just a moment..." in html else ""
+        raise RuntimeError(
+            f"__PRELOADED_STATE__ not found in Mobalytics HTML{hint}. "
+            "Save the page from a browser and pass it via --moba-relics / --moba-cards."
+        )
     return json.loads(m.group(1))
+
+
+def _moba_html(url: str, saved: Path | None) -> str:
+    if not saved:
+        return fetch(url)
+    text = saved.read_text(encoding="utf-8")
+    if "line-gutter-backdrop" in text:
+        # Chrome "view-source:" page saved with Ctrl+S: source is wrapped in
+        # per-line table markup and HTML-escaped. Unwrap it back to raw source.
+        text = re.sub(r"</td></tr>", "\n", text)
+        text = html_lib.unescape(re.sub(r"<[^>]+>", "", text))
+    return text
 
 
 def _doc_data(state: dict) -> dict:
@@ -103,8 +79,8 @@ def _doc_data(state: dict) -> dict:
     return body[0]["game"]["documents"]["userGeneratedDocumentBySlug"]["data"]["data"]
 
 
-def scrape_mobalytics_relics() -> dict:
-    html = fetch("https://mobalytics.gg/slay-the-spire-2/tier-lists/relics")
+def scrape_mobalytics_relics(saved: Path | None = None) -> dict:
+    html = _moba_html("https://mobalytics.gg/slay-the-spire-2/tier-lists/relics", saved)
     doc = _doc_data(_extract_preload(html))
     section = doc["tierLists"]["values"][0]
     tiers = {
@@ -114,11 +90,11 @@ def scrape_mobalytics_relics() -> dict:
     return {"tiers": tiers}
 
 
-def scrape_mobalytics_cards(prev_path: Path) -> dict:
+def scrape_mobalytics_cards(prev_path: Path, saved: Path | None = None) -> dict:
     """Scrape cards. Map each tier list to a character by overlap with the
     existing JSON's per-character card sets — Mobalytics' API doesn't label
     them by name."""
-    html = fetch("https://mobalytics.gg/slay-the-spire-2/tier-lists/cards")
+    html = _moba_html("https://mobalytics.gg/slay-the-spire-2/tier-lists/cards", saved)
     doc = _doc_data(_extract_preload(html))
 
     prev = json.loads(prev_path.read_text(encoding="utf-8"))
@@ -135,7 +111,12 @@ def scrape_mobalytics_cards(prev_path: Path) -> dict:
         scores = {char: sum(1 for c in all_cards if c in sig) for char, sig in sigs.items()}
         best = max(scores, key=scores.get)
         if scores[best] == 0:
-            raise RuntimeError(f"could not identify character for tier list {tl['id']}")
+            # Mobalytics added a separate list for multiplayer cards, which the
+            # game keeps in ColorlessCardPool (Pool.Title == "colorless").
+            if "Colorless" in characters:
+                raise RuntimeError(f"could not identify character for tier list {tl['id']}")
+            print(f"  tier list {tl['id']} matches no character -> Colorless ({len(all_cards)} cards)")
+            best = "Colorless"
         characters[best] = tier_data
 
     return {
@@ -181,22 +162,23 @@ def _write_pretty(path: Path, payload: dict) -> None:
 
 
 def main() -> None:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--moba-relics", type=Path, help="saved Mobalytics relic tier list page")
+    ap.add_argument("--moba-cards", type=Path, help="saved Mobalytics card tier list page")
+    args = ap.parse_args()
+
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    print("[1/3] Mobalytics relics")
-    relics = scrape_mobalytics_relics()
+    print("[1/2] Mobalytics relics")
+    relics = scrape_mobalytics_relics(args.moba_relics)
     _write_pretty(DATA_DIR / "mobalytics_relics.json", relics)
 
-    print("[2/3] slaythespire-2.com cards")
-    sts2com = scrape_sts2com()
-    _write_pretty(DATA_DIR / "slaythespire2_com_cards.json", sts2com)
-
-    print("[3/3] Mobalytics cards")
-    moba = scrape_mobalytics_cards(DATA_DIR / "mobalytics_cards.json")
+    print("[2/2] Mobalytics cards")
+    moba = scrape_mobalytics_cards(DATA_DIR / "mobalytics_cards.json", args.moba_cards)
     _write_inline_chars(
         DATA_DIR / "mobalytics_cards.json",
         moba,
-        char_order=["Ironclad", "Silent", "Regent", "Necrobinder", "Defect"],
+        char_order=["Ironclad", "Silent", "Regent", "Necrobinder", "Defect", "Colorless"],
     )
 
     print("Done. Re-build the mod to embed the new resources.")

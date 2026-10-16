@@ -173,7 +173,6 @@ src/
     TierItemIcon.cs        — Draggable card/relic icon
 data/tier_lists/
   mobalytics_cards.json    — Card tiers per character (embedded)
-  slaythespire2_com_cards.json — Wiki card tiers (embedded)
   mobalytics_relics.json   — Relic tiers (embedded)
 build/analyzers/
   Godot.SourceGenerators.dll — Enables Godot virtual methods
@@ -211,7 +210,7 @@ public static class MyPatch
 
 1. **Built-in tiers** loaded from embedded JSON at mod init
 2. **Custom tiers** loaded from `%AppData%/SlayTheSpire2/smartpick_custom_tiers.json`
-3. **Lookup priority**: custom ordered > mobalytics + wiki blend
+3. **Lookup priority**: custom ordered > Mobalytics (character list, then "Colorless" list for multiplayer cards)
 4. **Custom tiers use position-based scoring**: first in S=100, last in S=85, linearly interpolated
 5. **Badge display**: `CardBadgeOverlay.AttachBadgesDeferred(screenNode)` scans tree, creates badge UI
 

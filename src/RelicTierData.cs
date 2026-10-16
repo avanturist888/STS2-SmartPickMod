@@ -151,6 +151,10 @@ public static class RelicTierData
 
     private static string CollapseKey(string s)
     {
+        // Tier lists say "The Chosen Cheese" while the game id is CHOSEN_CHEESE.
+        s = s.Trim();
+        if (s.StartsWith("the ", StringComparison.OrdinalIgnoreCase))
+            s = s.Substring(4);
         var sb = new System.Text.StringBuilder(s.Length);
         foreach (var c in s)
         {

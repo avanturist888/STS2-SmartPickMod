@@ -251,14 +251,16 @@ public static class RewardExportPatches
 
 /// <summary>
 /// Explicit patch for the main rewards screen. This is more reliable than reflection-based guessing.
-/// Hooks NRewardsScreen.SetRewards and exports any card rewards that look like "choose a card" options.
+/// Hooks NRewardsScreen.ShowScreen (game v0.107+; replaced SetRewards) and exports any card rewards
+/// that look like "choose a card" options.
 /// </summary>
-[HarmonyPatch(typeof(NRewardsScreen), nameof(NRewardsScreen.SetRewards))]
+[HarmonyPatch(typeof(NRewardsScreen), nameof(NRewardsScreen.ShowScreen))]
 public static class RewardsScreenExportPatches
 {
     [HarmonyPostfix]
-    public static void AfterSetRewards(IEnumerable<Reward> rewards)
+    public static void AfterShowScreen(RewardsSet set)
     {
+        var rewards = set?.Rewards;
         if (rewards == null) return;
 
         try
